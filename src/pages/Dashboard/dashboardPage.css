@@ -1,0 +1,41 @@
+.people-container {
+  display: flex;
+  gap: 40px; /* space between columns */
+  padding: 20px;
+}
+
+.all-people,
+.hired-people {
+  flex: 1; /* take equal space */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f9f9f9;
+}
+
+.all-people h2,
+.hired-people h2 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+li a {
+  text-decoration: none;
+  color: #333;
+}
+
+li a:hover {
+  text-decoration: underline;
+  color: #007bff;
+}
