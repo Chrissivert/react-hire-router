@@ -25,6 +25,11 @@ export default function PeopleList({ people, hiredPeople }) {
           {hiredPeople.map(hiredPerson => (
             <li key={hiredPerson.id?.value || hiredPerson.email}>
               {hiredPerson.name.first} {hiredPerson.name.last}
+              <Link
+                to={`/edit/${encodeURIComponent(hiredPerson.id?.value || hiredPerson.email)}`}
+              >
+                <button>Edit</button>
+              </Link>
             </li>
           ))}
         </ul>

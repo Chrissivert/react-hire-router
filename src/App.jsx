@@ -3,22 +3,27 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard/DashboardPage'
 import ProfilePage from './pages/PersonProfile/ProfilePage'
+import EditPage from './pages/EditPage/EditPage'
 
 export default function App() {
-  const [randomPeople, setPeople] = useState([])
+  const [person, setPerson] = useState([])
   const [hiredPeople, setHiredPeople] = useState([])
+
+  console.log("App")
+  console.log(person)
+  console.log(hiredPeople)
 
 
   useEffect(() => {
     const storedPeople = localStorage.getItem('people')
     if (storedPeople) {
-      setPeople(JSON.parse(storedPeople))
+      setPerson(JSON.parse(storedPeople))
     } else {
       fetch('https://randomuser.me/api/?results=50')
         .then(res => res.json())
         .then(data => {
-          setPeople(data.results)
-          localStorage.setItem('people', JSON.stringify(data.results)) // save to localStorage
+          setPerson(data.results)
+          localStorage.setItem('people', JSON.stringify(data.results))
         })
     }
   }, [])
@@ -26,9 +31,21 @@ export default function App() {
   const navigate = useNavigate()
 
   const hirePerson = (person) => {
-    setHiredPeople(prev => [...prev, person])
-    navigate('/') 
-  }
+  if (hiredPeople.some(p => p.id?.value === person.id?.value || p.email === person.email)) return
+  setHiredPeople(prev => [...prev, person])
+  navigate('/')
+}
+
+const updateHiredPerson = (updatedPerson) => {
+  setHiredPeople(prev =>
+    prev.map(p =>
+      p.id?.value === updatedPerson.id?.value || p.email === updatedPerson.email
+        ? updatedPerson
+        : p
+    )
+  )
+}
+
 
   return (
     <>
@@ -37,11 +54,17 @@ export default function App() {
       </header>
 
       <Routes>
-        <Route path="/" element={<Dashboard people={randomPeople} hiredPeople={hiredPeople} />} />
+        <Route path="/" element={<Dashboard people={person} hiredPeople={hiredPeople} />} />
         <Route path="/profile/:id" element={<ProfilePage
-        people={randomPeople}
+        people={person}
         hirePerson={hirePerson}
       />} />
+        <Route path="/edit/:id" element={<EditPage
+      people={person}
+      hiredPeople={hiredPeople}
+      updateHiredPerson={updateHiredPerson}
+    />} />
+
       </Routes>
     </>
   )
